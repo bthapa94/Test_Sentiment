@@ -1,5 +1,5 @@
 # Test_Sentiment
-entiment of earnings calls: class action vs. non-class action firms
+Sentiment of earnings calls: class action vs. non-class action firms
 
 Company-level sentiment scores for firms that faced a securities class action (CA) and a matched sample of firms that did not (non-CA). All of a company's earnings call text (componenttext) is combined and scored with five methods:
 
