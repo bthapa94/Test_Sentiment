@@ -96,7 +96,7 @@ Each method writes one Excel file with two sheets, `finalca` and `finalnonca`. E
 | `final_sentiment_scores_VADER_preprocessed.xlsx` | `positive_score`, `negative_score`, `neutral_score`, `compound_score`, `label` |
 | `final_sentiment_TextBlob_results.xlsx` | `polarity`, `subjectivity`, `label`, `word_count` |
 | `final_sentiment_Flair_results.xlsx` | `positive_score`, `negative_score`, `label`, `word_count` |
-| `final_sentiment_LM_combined.xlsx` | `positivewordcount`, `negativewordcount`, `totalwords`, `sentimentscore`, `class` |
+| `final_sentiment_LM_combined.xlsx` | `positivewordcount`, `negativewordcount`, `totalwords`, `sentimentscore`, `label` |
 | `final_sentiment_FinBERT_results.xlsx` | `positive_score`, `negative_score`, `neutral_score`, `compound_score`, `n_sentences`, `n_positive`, `n_negative`, `n_neutral`, `label` |
 
 **`label`**: 1 = negative tone, 0 = not negative.
@@ -116,6 +116,8 @@ Each method writes one Excel file with two sheets, `finalca` and `finalnonca`. E
 ```
 sentimentscore = (positive words − negative words) / (positive words + negative words)
 ```
+
+The label is 1 if sentimentscore < 0.
 
 A word is in a list if its `Positive` / `Negative` value in the master dictionary is greater than 0.
 Those columns hold the year a word was added, and negative values mark words that were later removed.
