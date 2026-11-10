@@ -20,22 +20,25 @@ The goal is to compare tone between the two groups.
 
 ---
 
-## Repo structure
+## Files
 
 ```
-stic/
-├── sentiment_ca_nonca.py       # main script
-├── sentiment_ca_nonca.ipynb    # same code as a notebook (Jupyter / Colab)
-├── make_sample.py              # builds the 10-company sample file
+├── sentiment_ca_nonca.py                              # main script
+├── sentiment_ca_nonca.ipynb                           # same code as a notebook (Jupyter / Colab)
+├── company_class_split.xlsx                           # transcript data
+├── Loughran-McDonald_MasterDictionary_1993-2025.csv   # LM dictionary
 ├── requirements.txt
-├── README.md
-├── sample_data/
-│   └── company_class_split.xlsx   # 10 CA + 10 non-CA companies, for trying the code
-├── data/                       # you add this, not tracked by git
-│   ├── company_class_split.xlsx
-│   └── Loughran-McDonald_MasterDictionary_1993-2025.csv
-└── output/                     # created when you run the script
+└── README.md
 ```
+
+> **Note:** `company_class_split.xlsx` in this repo contains a sample of 10 companies in each group (CA and non-CA).
+
+**`company_class_split.xlsx`**
+- Sheet 1: non-CA companies
+- Sheet 2: CA companies
+- Required columns: `companyid`, `companyname`, `componenttext`
+
+The LM dictionary comes from the [Software Repository for Accounting and Finance](https://sraf.nd.edu/loughranmcdonald-master-dictionary/).
 
 ---
 
@@ -58,43 +61,15 @@ pip install -r requirements.txt
 
 The first run also downloads the NLTK data, the Flair model and the FinBERT model. Allow a few minutes for that.
 
-### 3. Add the data
-
-Create a `data/` folder and put two files in it:
-
-**`company_class_split.xlsx`**
-- Sheet 1: non-CA companies
-- Sheet 2: CA companies
-- Required columns: `companyid`, `companyname`, `componenttext`
-
-**`Loughran-McDonald_MasterDictionary_1993-2025.csv`**
-Download it from the [Software Repository for Accounting and Finance](https://sraf.nd.edu/loughranmcdonald-master-dictionary/).
-
-The data is not part of this repo.
-
-### 4. Try it on the sample data
-
-`sample_data/` has 10 CA and 10 non-CA companies, so you can test the code without the full dataset:
-
-```bash
-python sentiment_ca_nonca.py --data sample_data/company_class_split.xlsx --out output_test
-```
-
-You still need the LM dictionary in `data/` (or pass it with `--lm`).
-
-To rebuild the sample from the full file:
-
-```bash
-python make_sample.py --n 10
-```
-
-### 5. Run the full dataset
+### 3. Run
 
 ```bash
 python sentiment_ca_nonca.py
 ```
 
 Results are saved to `output/`.
+
+To use your own data, replace `company_class_split.xlsx` with a file in the same format, or pass its path with `--data`.
 
 ---
 
@@ -158,8 +133,8 @@ compound_score = (positive sentences − negative sentences) / (positive + negat
 
 ## Running time
 
-VADER, TextBlob, Flair and LM finish quickly. FinBERT scores every sentence, so it is slow on a CPU,
-and the full dataset can take many hours. If you have an NVIDIA GPU the script uses it automatically.
+VADER, TextBlob, Flair and LM finish quickly. FinBERT scores every sentence, so it is slow on a CPU.
+If you have an NVIDIA GPU the script uses it automatically.
 On Google Colab, open the notebook and go to **Runtime → Change runtime type → GPU**.
 
 To run FinBERT on its own:
@@ -190,7 +165,7 @@ python -m pip install -U huggingface_hub datasets transformers flair
 ```
 
 **`FileNotFoundError` for the data**
-Check that both files are inside `data/` with the exact names shown above, or pass the paths with `--data` and `--lm`.
+Check that both data files are in the same folder as the script with the exact names shown above, or pass the paths with `--data` and `--lm`.
 
 ---
 
