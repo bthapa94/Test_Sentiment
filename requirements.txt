@@ -1,0 +1,9 @@
+pandas
+openpyxl
+xlsxwriter
+nltk
+textblob
+torch
+transformers
+sentencepiece>=0.2.0
+flair>=0.14
