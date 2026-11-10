@@ -15,8 +15,8 @@ from textblob import TextBlob
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 BASE = Path(__file__).resolve().parent
-DATA_FILE = BASE / 'data' / 'company_class_split.xlsx'
-LM_FILE = BASE / 'data' / 'Loughran-McDonald_MasterDictionary_1993-2025.csv'
+DATA_FILE = BASE / 'company_class_split.xlsx'
+LM_FILE = BASE / 'Loughran-McDonald_MasterDictionary_1993-2025.csv'
 OUT_DIR = BASE / 'output'
 
 FINBERT_MODEL = 'yiyanghkust/finbert-tone'
@@ -176,7 +176,7 @@ def load_lm(path):
     return pos, neg
 
 
-def run_lm(df, group, lm_pos, lm_neg):
+def run_lm(df, lm_pos, lm_neg):
     rows = []
     for cid, name, text in company_texts(df):
         tokens = [t.lower() for t in word_tokenize(text) if t.isalpha()]
@@ -190,7 +190,7 @@ def run_lm(df, group, lm_pos, lm_neg):
             'negativewordcount': neg,
             'totalwords': len(tokens),
             'sentimentscore': score,
-            'class': group,
+            'label': 1 if score < 0 else 0,
         })
     return pd.DataFrame(rows)
 
@@ -222,7 +222,7 @@ def main():
 
     if 'lm' in args.models:
         lm_pos, lm_neg = load_lm(args.lm)
-        save(run_lm(finalca, 'CA', lm_pos, lm_neg), run_lm(finalnonca, 'NonCA', lm_pos, lm_neg),
+        save(run_lm(finalca, lm_pos, lm_neg), run_lm(finalnonca, lm_pos, lm_neg),
              args.out, 'final_sentiment_LM_combined.xlsx')
 
     if 'finbert' in args.models:
